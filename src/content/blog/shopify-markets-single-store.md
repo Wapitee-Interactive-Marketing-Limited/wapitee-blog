@@ -164,17 +164,37 @@ This is the boundary most easily overlooked but with the biggest impact on inter
 
 ## FAQ
 
-**Q: How many markets can a single store have?**
-A: Up to 50 markets (including sub-markets). Most brands use 3–10.
+<details class="faq-item" open>
+<summary>How many markets can a single store have?</summary>
 
-**Q: How to avoid FX losses?**
-A: The official path is Shopify Payments multi-currency accounts. Third-party processors (Airwallex/PingPong) can collect independently but lose Markets' **multi-currency checkout** (all markets pay in default currency). What you're trading off is currency experience, not multilingual capability — **language/translation/URL localization are unaffected**.
+Up to 50 markets (including sub-markets). Most brands use 3–10.
 
-**Q: Does JCT registration require a Japanese company?**
-A: No. JCT registration can be completed by foreign companies through a Japanese tax accountant (requires power of attorney + local accountant). But "selling as a Japanese company" is different — that requires a real Japanese entity + separate store.
+</details>
 
-**Q: Does multi-entity require Shopify Plus?**
-A: Advanced multi-entity features (per-market business entity, checkout block customization) require Shopify Plus+. If you're just opening independent standard stores per entity, Plus is not mandatory.
+<details class="faq-item">
+<summary>How to avoid FX losses?</summary>
 
-**Q: Why is the multilingual URL `/en-ca` instead of `/en` or `/ca`?**
-A: Shopify uses IETF BCP 47 language tags for URL prefixes, structured as language-region (language first). Language-only prefixes (like `/fr`) are only for the primary market; secondary markets must use language-region combos (like `/fr-ca`, `/en-sg`) to distinguish the same language across different countries.
+The official path is Shopify Payments multi-currency accounts. Third-party processors (Airwallex/PingPong) can collect independently but lose Markets' **multi-currency checkout** (all markets pay in default currency). What you're trading off is currency experience, not multilingual capability — **language/translation/URL localization are unaffected**.
+
+</details>
+
+<details class="faq-item">
+<summary>Does JCT registration require a Japanese company?</summary>
+
+No. JCT registration can be completed by foreign companies through a Japanese tax accountant (requires power of attorney + local accountant). But "selling as a Japanese company" is different — that requires a real Japanese entity + separate store.
+
+</details>
+
+<details class="faq-item">
+<summary>Does multi-entity require Shopify Plus?</summary>
+
+Advanced multi-entity features (per-market business entity, checkout block customization) require Shopify Plus+. If you're just opening independent standard stores per entity, Plus is not mandatory.
+
+</details>
+
+<details class="faq-item">
+<summary>Why is the multilingual URL `/en-ca` instead of `/en` or `/ca`?</summary>
+
+Shopify uses IETF BCP 47 language tags for URL prefixes, structured as language-region (language first). Language-only prefixes (like `/fr`) are only for the primary market; secondary markets must use language-region combos (like `/fr-ca`, `/en-sg`) to distinguish the same language across different countries.
+
+</details>

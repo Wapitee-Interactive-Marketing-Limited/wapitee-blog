@@ -202,20 +202,44 @@ The good news: we can't grant AI tools any extra permissions on your behalf. Onl
 
 ## FAQ
 
-### Will this cost me anything?
+<details class="faq-item" open>
+<summary>Will this cost me anything?</summary>
+
 No. Collaborator accounts are free and don't count toward your plan's staff seat limit — our access costs you nothing on any Shopify plan.
 
-### Can Wapitee see my bank details or payment settings?
+</details>
+
+<details class="faq-item">
+<summary>Can Wapitee see my bank details or payment settings?</summary>
+
 **No.** Collaborator accounts are blocked from accessing Shopify Payments settings and bank account details by default. This protection exists regardless of which other permissions are granted.
 
-### How long does the request code last?
+</details>
+
+<details class="faq-item">
+<summary>How long does the request code last?</summary>
+
 The code remains active until you change or disable it — it doesn't expire on its own. Once our project wraps up, we recommend rotating it.
 
-### Can I approve from my phone?
+</details>
+
+<details class="faq-item">
+<summary>Can I approve from my phone?</summary>
+
 Yes. Open the Shopify mobile app → Users section → pending requests appear with notification badges. You can review and approve directly from your phone.
 
-### What if I want to remove access mid-project?
+</details>
+
+<details class="faq-item">
+<summary>What if I want to remove access mid-project?</summary>
+
 You can revoke access at any time, instantly. Go to Settings → Users and permissions → Collaborators, find our name, and click "Remove access." We lose entry immediately.
 
-### Can I limit what Wapitee can see or change?
+</details>
+
+<details class="faq-item">
+<summary>Can I limit what Wapitee can see or change?</summary>
+
 Absolutely. When approving our request, you can uncheck any permission category you don't want us to have. You can also adjust permissions after approval at any time without notifying us.
+
+</details>

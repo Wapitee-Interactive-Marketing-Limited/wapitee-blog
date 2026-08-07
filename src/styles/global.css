@@ -399,3 +399,84 @@ img {
   }
 }
 
+/* ============================================
+   FAQ accordion (native <details>/<summary>)
+   Content ships fully rendered in HTML — SEO safe;
+   JS only adds single-open behavior.
+   ============================================ */
+.faq-item {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg-card);
+  margin: 0.65rem 0;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.faq-item[open] {
+  border-color: var(--line-strong);
+}
+
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.95rem 1.15rem;
+  font-weight: 600;
+  font-size: 0.98rem;
+  color: var(--ink);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::marker { content: ""; }
+
+.faq-item summary::after {
+  content: "+";
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--ink-soft);
+  transition: transform 0.25s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.faq-item summary:hover::after {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.faq-item[open] summary {
+  color: var(--brand-dark);
+}
+
+.faq-item[open] summary::after {
+  content: "−";
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+  transform: rotate(180deg);
+}
+
+.faq-item > p,
+.faq-item > ul,
+.faq-item > ol {
+  margin: 0;
+  padding: 0 1.15rem 1rem;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.faq-item > p:first-of-type {
+  border-top: 1px dashed var(--line);
+  padding-top: 0.85rem;
+}
+

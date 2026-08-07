@@ -165,17 +165,37 @@ Shopify 多语言 URL 前缀使用 **IETF BCP 47 语言标签**，结构为 **`�
 
 ## 常见问题
 
-**Q：单个店铺可以有多少个市场？**
-A：最多 50 个市场（含子市场）。大多数品牌实际使用 3–10 个。
+<details class="faq-item" open>
+<summary>单个店铺可以有多少个市场？</summary>
 
-**Q：如何避免汇兑损失？**
-A：官方路径是 Shopify Payments 多币种账户。第三方支付（Airwallex/PingPong）可以独立收款，但会失去 Markets 的**多币种结账**（所有市场以默认货币支付）。你牺牲的是货币体验，不是多语言能力——**语言/翻译/URL 本地化不受影响**。
+最多 50 个市场（含子市场）。大多数品牌实际使用 3–10 个。
 
-**Q：注册 JCT 需要日本公司吗？**
-A：不需要。外国公司可以通过日本税务会计师完成 JCT 注册（需要委托书 + 本地会计师）。但「以日本公司身份销售」是另一回事——那需要真实的日本主体 + 独立店铺。
+</details>
 
-**Q：多主体必须用 Shopify Plus 吗？**
-A：进阶的多主体功能（按市场商业主体、结账区块定制）需要 Shopify Plus+。如果只是按主体开设独立的标准店铺，Plus 不是必须的。
+<details class="faq-item">
+<summary>如何避免汇兑损失？</summary>
 
-**Q：为什么多语言 URL 是 `/en-ca` 而不是 `/en` 或 `/ca`？**
-A：Shopify 使用 IETF BCP 47 语言标签作为 URL 前缀，结构是语言-地区（语言在前）。纯语言前缀（如 `/fr`）只用于主市场；次级市场必须使用语言-地区组合（如 `/fr-ca`、`/en-sg`），以区分同一语言在不同国家的市场。
+官方路径是 Shopify Payments 多币种账户。第三方支付（Airwallex/PingPong）可以独立收款，但会失去 Markets 的**多币种结账**（所有市场以默认货币支付）。你牺牲的是货币体验，不是多语言能力——**语言/翻译/URL 本地化不受影响**。
+
+</details>
+
+<details class="faq-item">
+<summary>注册 JCT 需要日本公司吗？</summary>
+
+不需要。外国公司可以通过日本税务会计师完成 JCT 注册（需要委托书 + 本地会计师）。但「以日本公司身份销售」是另一回事——那需要真实的日本主体 + 独立店铺。
+
+</details>
+
+<details class="faq-item">
+<summary>多主体必须用 Shopify Plus 吗？</summary>
+
+进阶的多主体功能（按市场商业主体、结账区块定制）需要 Shopify Plus+。如果只是按主体开设独立的标准店铺，Plus 不是必须的。
+
+</details>
+
+<details class="faq-item">
+<summary>为什么多语言 URL 是 `/en-ca` 而不是 `/en` 或 `/ca`？</summary>
+
+Shopify 使用 IETF BCP 47 语言标签作为 URL 前缀，结构是语言-地区（语言在前）。纯语言前缀（如 `/fr`）只用于主市场；次级市场必须使用语言-地区组合（如 `/fr-ca`、`/en-sg`），以区分同一语言在不同国家的市场。
+
+</details>

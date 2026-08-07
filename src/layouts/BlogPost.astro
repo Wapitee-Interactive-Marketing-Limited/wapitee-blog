@@ -181,6 +181,18 @@ const coverURL = data.cover ? new URL(`/blog${data.cover}`, Astro.site) : null;
     window.addEventListener('resize', updateProgress);
     updateProgress();
 
+    // FAQ accordion — single-open behavior layered on native <details>
+    // (content is fully server-rendered, so SEO and no-JS fallback are intact)
+    const faqItems = Array.from(document.querySelectorAll('.faq-item'));
+    for (const item of faqItems) {
+      item.addEventListener('toggle', () => {
+        if (!item.open) return;
+        for (const other of faqItems) {
+          if (other !== item && other.open) other.open = false;
+        }
+      });
+    }
+
     // TOC scrollspy — highlight the section currently in view
     const tocLinks = Array.from(document.querySelectorAll('.toc__link'));
     const headingEls = tocLinks

@@ -203,20 +203,44 @@ summary: "Shopify 协作者（Collaborator）权限让 Wapitee 在不占用员�
 
 ## 常见问题
 
-### 这会产生费用吗？
+<details class="faq-item" open>
+<summary>这会产生费用吗？</summary>
+
 不会。协作者账号免费，也不计入套餐的员工席位上限——任何 Shopify 套餐下，给我们开通权限都不会产生费用。
 
-### Wapitee 能看到我的银行信息或收款设置吗？
+</details>
+
+<details class="faq-item">
+<summary>Wapitee 能看到我的银行信息或收款设置吗？</summary>
+
 **不能。** 协作者账号默认被屏蔽访问 Shopify Payments 设置和银行账户信息。无论授予了哪些其他权限，这项保护始终有效。
 
-### 请求码有效期多久？
+</details>
+
+<details class="faq-item">
+<summary>请求码有效期多久？</summary>
+
 请求码在你修改或停用之前一直有效，不会自动过期。我们的项目收尾后，建议你轮换一次请求码。
 
-### 可以用手机批准吗？
+</details>
+
+<details class="faq-item">
+<summary>可以用手机批准吗？</summary>
+
 可以。打开 Shopify 手机 App → Users 区域 → 待处理请求会带通知角标，直接在手机上审核批准即可。
 
-### 项目进行中想撤销权限怎么办？
+</details>
+
+<details class="faq-item">
+<summary>项目进行中想撤销权限怎么办？</summary>
+
 你可以随时、即时撤销。进入 Settings → Users and permissions → Collaborators，找到我们的名字，点击「Remove access」，我们会立即失去访问权限。
 
-### 能限制 Wapitee 查看或修改的范围吗？
+</details>
+
+<details class="faq-item">
+<summary>能限制 Wapitee 查看或修改的范围吗？</summary>
+
 当然可以。批准请求时，你可以取消勾选任何不想授予的权限类别。批准后也可以随时调整权限，无需通知我们。
+
+</details>
