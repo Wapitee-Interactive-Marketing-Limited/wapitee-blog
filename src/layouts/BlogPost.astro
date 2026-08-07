@@ -1,0 +1,489 @@
+---
+import Nav from '../components/Nav.astro';
+import DebugMeta from '../components/DebugMeta.astro';
+import Footer from '../components/Footer.astro';
+import ArticleMeta from '../components/ArticleMeta.astro';
+import CTA from '../components/CTA.astro';
+import RelatedPosts from '../components/RelatedPosts.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import type { CollectionEntry } from 'astro:content';
+import { t, tMinRead, locales, type Lang } from '../i18n/translations';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  allPosts: CollectionEntry<'blog'>[];
+  headings?: Heading[];
+  lang?: Lang;
+}
+
+const { post, allPosts, headings = [], lang = 'en' } = Astro.props;
+const { data } = post;
+
+// Public slug without the collection's "zh/" folder prefix
+const baseSlug = post.slug.replace(/^zh\//, '');
+const prefix = lang === 'zh' ? '/zh' : '';
+
+// Calculate reading time (rough estimate: 200 words/min)
+const wordCount = post.body?.split(/\s+/).length || 0;
+const readingTime = tMinRead(lang, Math.max(1, Math.ceil(wordCount / 200)));
+
+// Other posts in the same language, shown below the article
+const otherPosts = allPosts
+  .filter(p => p.slug !== post.slug && (p.data.lang ?? 'en') === lang)
+  .slice(0, 5);
+
+// Canonical & alternate URLs (public, under wapitee.io/blog/)
+const canonicalURL = new URL(`/blog${prefix}/${baseSlug}`, Astro.site);
+const altURL = new URL(
+  lang === 'zh' ? `/blog/${baseSlug}` : `/blog/zh/${baseSlug}`,
+  Astro.site
+);
+// Cover image as an absolute URL (public assets live under /blog/ on wapitee.io)
+const coverURL = data.cover ? new URL(`/blog${data.cover}`, Astro.site) : null;
+---
+
+<!DOCTYPE html>
+<html lang={locales[lang]}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{data.title}</title>
+  <meta name="description" content={data.summary} />
+  <link rel="canonical" href={canonicalURL} />
+  <link rel="alternate" hreflang="en" href={new URL(`/blog/${baseSlug}`, Astro.site)} />
+  <link rel="alternate" hreflang="zh" href={new URL(`/blog/zh/${baseSlug}`, Astro.site)} />
+  <link rel="alternate" hreflang="x-default" href={new URL(`/blog/${baseSlug}`, Astro.site)} />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content={data.title} />
+  <meta property="og:description" content={data.summary} />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:site_name" content="Wapitee" />
+  <meta property="og:locale" content={locales[lang].replace('-', '_')} />
+  {coverURL && <meta property="og:image" content={coverURL} />}
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={data.title} />
+  <meta name="twitter:description" content={data.summary} />
+  {coverURL && <meta name="twitter:image" content={coverURL} />}
+
+  <!-- Article Schema -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": data.title,
+    "description": data.summary,
+    ...(coverURL ? { "image": coverURL.toString() } : {}),
+    "inLanguage": lang,
+    "datePublished": data.created,
+    "dateModified": data.updated || data.created,
+    "author": {
+      "@type": "Organization",
+      "name": "Wapitee",
+      "url": "https://wapitee.io"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Wapitee",
+      "url": "https://wapitee.io"
+    },
+    "mainEntityOfPage": canonicalURL.toString()
+  })} />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <Nav lang={lang} alternateHref={lang === 'zh' ? `/${baseSlug}` : `/zh/${baseSlug}`} />
+
+  {/* Meta/OG inspector — only renders when ?debug is in the URL */}
+  <DebugMeta />
+
+  {/* Reading progress — 3px brand bar pinned to the top of the viewport */}
+  <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+
+  <main class="article-page">
+    <div class="article-container">
+      <!-- Sidebar: table of contents — left column on desktop (sticky);
+           on narrow screens it sits above the article (static, not sticky)
+           so readers can skim the structure first -->
+      <aside class="article-sidebar">
+        <TableOfContents headings={headings} lang={lang} />
+      </aside>
+
+      <!-- Article column -->
+      <article class="article-body">
+        <!-- Hero -->
+        <header class="article-hero">
+          {data.tags && data.tags.length > 0 && (
+            <div class="article-tags">
+              {data.tags.map(tag => <span class="article-tag">{tag}</span>)}
+            </div>
+          )}
+          <h1 class="article-title">{data.title}</h1>
+          <ArticleMeta date={data.created} readingTime={readingTime} lang={lang} />
+        </header>
+
+        <!-- Content -->
+        <div class="prose" id="article-content">
+          <slot />
+        </div>
+
+        <!-- CTA -->
+        <CTA lang={lang} />
+
+        <!-- Sources / Verification footer -->
+        {data.sources && data.sources.length > 0 && (
+          <section class="sources">
+            <h2 class="sources__title">{t(lang, 'article.verification')}</h2>
+            <p class="sources__date">{t(lang, 'article.verified')}: {data.verified || data.updated || data.created}</p>
+            <ul class="sources__list">
+              {data.sources.map(src => (
+                <li class="sources__item">
+                  <a href={src.url} target="_blank" rel="noopener">{src.name}</a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <!-- Related articles: end of the reading flow, not floating -->
+        {otherPosts.length > 0 && (
+          <div class="related-bottom">
+            <RelatedPosts posts={otherPosts} lang={lang} />
+          </div>
+        )}
+      </article>
+    </div>
+  </main>
+
+  <Footer lang={lang} />
+
+  <script>
+    const bar = document.getElementById('reading-progress');
+    const updateProgress = () => {
+      if (!bar) return;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
+      bar.style.width = pct + '%';
+    };
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress);
+    updateProgress();
+
+    // TOC scrollspy — highlight the section currently in view
+    const tocLinks = Array.from(document.querySelectorAll('.toc__link'));
+    const headingEls = tocLinks
+      .map(a => document.getElementById(a.getAttribute('href')!.slice(1)))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const syncToc = () => {
+      if (!headingEls.length) return;
+      const offset = 120;
+      let current = headingEls[0].id;
+      for (const h of headingEls) {
+        if (h.getBoundingClientRect().top - offset <= 0) current = h.id;
+        else break;
+      }
+      tocLinks.forEach(a =>
+        a.classList.toggle('active', a.getAttribute('href') === `#${current}`)
+      );
+    };
+    window.addEventListener('scroll', syncToc, { passive: true });
+    syncToc();
+  </script>
+</body>
+</html>
+
+<style>
+.article-page {
+  padding: 2rem 2rem;
+}
+
+/* ---- Reading progress ---- */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: var(--brand-gradient);
+  z-index: 60;
+  pointer-events: none;
+}
+
+.article-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 3rem;
+  align-items: start;
+}
+
+/* ---- Sidebar ---- */
+@media (min-width: 1025px) {
+  .article-sidebar {
+    position: sticky;
+    top: calc(var(--nav-height) + 2rem);
+  }
+}
+
+/* ---- Hero ---- */
+.article-hero {
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 3px solid var(--brand);
+}
+
+.article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.article-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--brand);
+  background: var(--surface-danger);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+}
+
+.article-title {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+
+/* ---- Prose ---- */
+.prose {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--ink-soft);
+}
+
+.prose :global(h2) {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--line);
+  /* Keep the heading visible below the sticky nav when jumping via TOC */
+  scroll-margin-top: calc(var(--nav-height) + 1rem);
+}
+
+.prose :global(h3) {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  scroll-margin-top: calc(var(--nav-height) + 1rem);
+}
+
+.prose :global(p) {
+  margin-bottom: 1.25rem;
+}
+
+.prose :global(a) {
+  color: var(--brand);
+  text-decoration: underline;
+  text-decoration-color: var(--brand-light);
+  text-underline-offset: 2px;
+}
+
+.prose :global(a:hover) {
+  color: var(--brand-dark);
+}
+
+.prose :global(ul),
+.prose :global(ol) {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.prose :global(li) {
+  margin-bottom: 0.5rem;
+}
+
+/* ---- Blockquote ---- */
+.prose :global(blockquote) {
+  border-left: 4px solid var(--brand);
+  background: var(--bg-tint);
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--brand-dark);
+  font-style: italic;
+}
+
+.prose :global(blockquote p) {
+  margin-bottom: 0;
+}
+
+/* ---- Table ---- */
+/* display: table (default) so the table always stretches to the parent
+   width regardless of column count; long cell content wraps instead of
+   overflowing */
+.prose :global(table) {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin: 1.5rem 0;
+}
+
+.prose :global(th) {
+  background: var(--brand);
+  color: white;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.prose :global(td) {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-soft);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.prose :global(tr:hover td) {
+  background: var(--bg-soft);
+}
+
+/* ---- Inline code ---- */
+.prose :global(code) {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--bg-tint);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+  color: var(--brand-dark);
+}
+
+.prose :global(pre) {
+  background: var(--ink);
+  color: #e8e6e0;
+  padding: 1.25rem;
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.prose :global(pre code) {
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+
+/* ---- HR ---- */
+.prose :global(hr) {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 2.5rem 0;
+}
+
+/* ---- Images ---- */
+.prose :global(img) {
+  width: 100%;
+  border-radius: var(--radius-md);
+  margin: 1.5rem 0;
+}
+
+/* ---- Sources ---- */
+.sources {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background: var(--bg-tint);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+}
+
+.sources__title {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-mute);
+  margin-bottom: 0.5rem;
+}
+
+.sources__date {
+  font-size: 0.8rem;
+  color: var(--ink-mute);
+  margin-bottom: 0.75rem;
+}
+
+.sources__list {
+  list-style: none;
+  padding: 0;
+}
+
+.sources__item {
+  font-size: 0.85rem;
+  margin-bottom: 0.4rem;
+}
+
+.sources__item a {
+  color: var(--brand);
+  text-decoration: none;
+}
+
+.sources__item a:hover {
+  text-decoration: underline;
+}
+
+/* ---- Related articles (bottom of article) ---- */
+.related-bottom {
+  margin-top: 3rem;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 1024px) {
+  .article-container {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* TOC only earns its place beside the article on desktop —
+     on phones it's removed entirely instead of sitting on top */
+  .article-sidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .article-page {
+    padding: 1rem 1rem;
+  }
+  .article-title {
+    font-size: 1.8rem;
+  }
+  .prose {
+    font-size: 1rem;
+  }
+}
+</style>

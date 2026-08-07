@@ -1,0 +1,32 @@
+---
+import { formatDate, type Lang } from '../i18n/translations';
+
+interface Props {
+  date: string;
+  readingTime?: string;
+  lang?: Lang;
+}
+
+const { date, readingTime, lang = 'en' } = Astro.props;
+
+const formatted = formatDate(lang, date, 'long');
+---
+
+<div class="meta">
+  <span class="meta__date">{formatted}</span>
+  {readingTime && <><span class="meta__dot">&middot;</span><span class="meta__read">{readingTime}</span></>}
+</div>
+
+<style>
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--ink-mute);
+}
+
+.meta__dot {
+  color: var(--ink-faint);
+}
+</style>

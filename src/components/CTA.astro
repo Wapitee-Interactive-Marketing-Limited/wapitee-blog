@@ -1,0 +1,87 @@
+---
+import { t, type Lang } from '../i18n/translations';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+---
+
+<aside class="cta-box">
+  <div class="cta-box__content">
+    <h3 class="cta-box__title">{t(lang, 'cta.title')}</h3>
+    <p class="cta-box__desc">
+      {t(lang, 'cta.desc')}
+    </p>
+  </div>
+  <a href="https://wapitee.io" class="cta-box__btn">
+    {t(lang, 'cta.button')}
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+</aside>
+
+<style>
+.cta-box {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  margin: 2.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  border-left: 4px solid var(--brand);
+}
+
+.cta-box__title {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+
+.cta-box__desc {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  max-width: 400px;
+}
+
+.cta-box__btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--brand);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.cta-box__btn:hover {
+  background: var(--brand-dark);
+  color: white;
+}
+
+@media (max-width: 640px) {
+  .cta-box {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .cta-box__desc {
+    max-width: none;
+  }
+}
+</style>

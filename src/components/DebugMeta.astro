@@ -1,0 +1,285 @@
+---
+/**
+ * DebugMeta — hidden SEO/OG inspector panel.
+ *
+ * Activated via `?debug` (or `?debug=1`) in the URL. Pages are static
+ * (SSG), so the query string is only available client-side: the probe
+ * <div> ships empty and the script below decides whether to populate
+ * it. Without the param the script removes the probe immediately, so
+ * normal visitors and crawlers see nothing — and since all the info
+ * is public in <head> anyway, this is obfuscation, not security.
+ *
+ * The panel reads the *actually rendered* <head> DOM, so it always
+ * reflects the true production output.
+ */
+---
+
+<div hidden id="dbg-probe"></div>
+
+<script>
+  const probe = document.getElementById('dbg-probe');
+  const enabled = new URLSearchParams(location.search).has('debug');
+
+  if (!probe || !enabled) {
+    probe?.remove();
+  } else {
+    // Build the panel inside the probe container
+    probe.hidden = false;
+    probe.innerHTML = `
+      <section class="dbg" id="dbg-meta" aria-label="Meta debug panel">
+        <header class="dbg__bar">
+          <span class="dbg__badge">DEBUG</span>
+          <span class="dbg__title">Meta &amp; OG Inspector</span>
+          <span class="dbg__hint">reads the rendered &lt;head&gt; · click a value to copy</span>
+          <button class="dbg__close" id="dbg-close" type="button" title="Exit debug mode">exit ✕</button>
+        </header>
+        <div class="dbg__body" id="dbg-body"></div>
+      </section>`;
+
+    const body = document.getElementById('dbg-body');
+
+    const groups: Record<string, { key: string; value: string; note?: string }[]> = {
+      'Document': [],
+      'SEO Basics': [],
+      'Open Graph': [],
+      'Twitter Card': [],
+      'Links · canonical / hreflang': [],
+      'Structured Data (JSON-LD)': [],
+      'Other': [],
+    };
+
+    const htmlEl = document.documentElement;
+    groups['Document'].push(
+      { key: 'URL', value: location.href },
+      { key: '<html lang>', value: htmlEl.getAttribute('lang') ?? '(not set)' },
+      { key: '<title>', value: document.title || '(empty)', note: `${document.title.length} chars` },
+    );
+
+    // --- meta tags ---
+    document.head.querySelectorAll('meta').forEach((m) => {
+      const name = m.getAttribute('name') ?? '';
+      const property = m.getAttribute('property') ?? '';
+      const httpEquiv = m.getAttribute('http-equiv') ?? '';
+      const charset = m.getAttribute('charset');
+      const content = m.getAttribute('content') ?? '';
+
+      if (charset) {
+        groups['SEO Basics'].push({ key: 'charset', value: charset });
+      } else if (property.startsWith('og:') || property.startsWith('article:') || property.startsWith('website:')) {
+        groups['Open Graph'].push({ key: property, value: content });
+      } else if (name.startsWith('twitter:') || property.startsWith('twitter:')) {
+        groups['Twitter Card'].push({ key: name || property, value: content });
+      } else if (name === 'description') {
+        groups['SEO Basics'].push({ key: name, value: content, note: `${content.length} chars` });
+      } else if (name || httpEquiv) {
+        const k = name || httpEquiv;
+        const target = ['robots', 'viewport', 'generator', 'theme-color'].includes(k) ? 'SEO Basics' : 'Other';
+        groups[target].push({ key: k, value: content });
+      } else if (content) {
+        groups['Other'].push({ key: m.outerHTML.slice(0, 60), value: content });
+      }
+    });
+
+    // --- link tags (canonical, hreflang alternates, icons) ---
+    document.head.querySelectorAll('link').forEach((l) => {
+      const rel = l.getAttribute('rel') ?? '';
+      if (rel === 'canonical') {
+        groups['Links · canonical / hreflang'].push({ key: 'canonical', value: l.getAttribute('href') ?? '' });
+      } else if (rel === 'alternate') {
+        const hreflang = l.getAttribute('hreflang') ?? '(no hreflang)';
+        groups['Links · canonical / hreflang'].push({ key: `alternate · ${hreflang}`, value: l.getAttribute('href') ?? '' });
+      } else if (rel.includes('icon')) {
+        groups['Other'].push({ key: `link rel="${rel}"`, value: l.getAttribute('href') ?? '' });
+      }
+    });
+
+    // --- JSON-LD ---
+    document.head.querySelectorAll('script[type="application/ld+json"]').forEach((s, i) => {
+      try {
+        const data = JSON.parse(s.textContent ?? '{}');
+        const type = Array.isArray(data) ? data.map((d) => d['@type']).join(', ') : data['@type'] ?? 'unknown';
+        groups['Structured Data (JSON-LD)'].push({
+          key: `#${i + 1} @type: ${type}`,
+          value: JSON.stringify(data, null, 2),
+        });
+      } catch {
+        groups['Structured Data (JSON-LD)'].push({ key: `#${i + 1} (parse error)`, value: s.textContent ?? '' });
+      }
+    });
+
+    // --- render groups ---
+    for (const [name, rows] of Object.entries(groups)) {
+      if (rows.length === 0) continue;
+
+      const sec = document.createElement('div');
+      sec.className = 'dbg__group';
+
+      const h = document.createElement('h3');
+      h.className = 'dbg__group-title';
+      h.textContent = `${name} (${rows.length})`;
+      sec.appendChild(h);
+
+      for (const row of rows) {
+        const r = document.createElement('button');
+        r.type = 'button';
+        r.className = 'dbg__row';
+        r.title = 'Click to copy value';
+
+        const k = document.createElement('span');
+        k.className = 'dbg__key';
+        k.textContent = row.key;
+
+        const v = document.createElement('span');
+        v.className = 'dbg__val';
+        v.textContent = row.value || '(empty)';
+        if (!row.value) v.classList.add('dbg__val--empty');
+
+        r.appendChild(k);
+        r.appendChild(v);
+
+        if (row.note) {
+          const n = document.createElement('span');
+          n.className = 'dbg__note';
+          n.textContent = row.note;
+          r.appendChild(n);
+        }
+
+        r.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(row.value);
+            r.classList.add('dbg__row--copied');
+            setTimeout(() => r.classList.remove('dbg__row--copied'), 900);
+          } catch {
+            /* clipboard blocked — ignore */
+          }
+        });
+
+        sec.appendChild(r);
+      }
+      body?.appendChild(sec);
+    }
+
+    // Exit debug mode: strip the param and remove the panel
+    document.getElementById('dbg-close')?.addEventListener('click', () => {
+      const url = new URL(location.href);
+      url.searchParams.delete('debug');
+      history.replaceState(null, '', url.pathname + (url.searchParams.toString() ? `?${url.searchParams}` : '') + url.hash);
+      probe.remove();
+    });
+  }
+</script>
+
+<style is:global>
+  /* is:global — the panel markup is injected client-side, so Astro's
+     scoped attribute selectors would never match it */
+  .dbg {
+    position: relative;
+    z-index: 40;
+    margin: 0.75rem auto 0;
+    max-width: 1080px;
+    padding: 0 1rem;
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+  }
+
+  .dbg__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #1d1d21;
+    color: #e8e6e0;
+    border-radius: 10px 10px 0 0;
+    padding: 0.55rem 0.9rem;
+    font-size: 0.78rem;
+  }
+
+  .dbg__badge {
+    background: #d42c62;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    padding: 0.18rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .dbg__title { font-weight: 600; }
+
+  .dbg__hint {
+    color: #8a8880;
+    font-size: 0.68rem;
+    margin-left: auto;
+    display: none;
+  }
+  @media (min-width: 720px) { .dbg__hint { display: inline; } }
+
+  .dbg__close {
+    background: transparent;
+    border: 1px solid #4a4a52;
+    color: #b5b3ae;
+    font: inherit;
+    font-size: 0.68rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 0.5rem;
+  }
+  .dbg__close:hover { color: #fff; border-color: #8a8880; }
+
+  .dbg__body {
+    background: #26262b;
+    color: #d8d6d0;
+    border-radius: 0 0 10px 10px;
+    padding: 0.4rem 0.9rem 0.9rem;
+    font-size: 0.74rem;
+    line-height: 1.5;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .dbg__group { margin-top: 0.85rem; }
+
+  .dbg__group-title {
+    color: #ff6b9d;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.35rem;
+  }
+
+  .dbg__row {
+    display: grid;
+    grid-template-columns: minmax(110px, 220px) 1fr auto;
+    gap: 0.75rem;
+    align-items: baseline;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px dashed #35353c;
+    color: inherit;
+    font: inherit;
+    padding: 0.3rem 0.25rem;
+    cursor: pointer;
+  }
+  .dbg__row:hover { background: #2e2e34; }
+  .dbg__row--copied { background: #22301f; }
+  .dbg__row--copied .dbg__val::after { content: " ✓ copied"; color: #9ec98f; }
+
+  .dbg__key {
+    color: #9aa0ff;
+    word-break: break-all;
+  }
+
+  .dbg__val {
+    word-break: break-all;
+    white-space: pre-wrap;
+  }
+  .dbg__val--empty { color: #b5543f; font-style: italic; }
+
+  .dbg__note {
+    color: #c08a4e;
+    font-size: 0.66rem;
+    white-space: nowrap;
+  }
+</style>

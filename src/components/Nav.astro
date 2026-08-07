@@ -1,0 +1,294 @@
+---
+import '../styles/global.css';
+import { t, type Lang } from '../i18n/translations';
+
+interface Props {
+  lang?: Lang;
+  /** URL of this page in the other language (e.g. "/zh" or "/zh/some-slug") */
+  alternateHref?: string;
+}
+
+const { lang = 'en', alternateHref = '/zh' } = Astro.props;
+
+const navLinks = [
+  { href: "https://wapitee.io", label: "HOME" },
+  { href: "https://wapitee.io/#web", label: "WEB" },
+  { href: "https://wapitee.io/#strategy", label: "STRATEGY" },
+  { href: "https://wapitee.io/#influencer", label: "INFLUENCER" },
+  { href: "https://wapitee.io/#about", label: "ABOUT" },
+];
+---
+
+<header class="nav">
+  <nav class="nav__inner">
+    <a href="/" class="nav__logo">
+      <svg width="110" height="28" viewBox="-1 -1 92 25" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Wapitee">
+        <path d="M0 0H3.34286L5.24436 12.7658L9.86955 0H13.0398L17.3639 12.2684L19.3771 0H22.6218L19.2789 17.7733H16.1459L11.2601 3.83008L6.01579 17.7733H2.91992L0 0Z" fill="#D42C62"/>
+        <path d="M23.1191 13.7098C23.1191 11.1147 25.0071 9.8188 28.7864 9.8188C29.6729 9.8188 30.5594 9.90339 31.4458 10.0658V9.08459C31.4458 7.9173 30.6034 7.33196 28.9218 7.33196C27.4973 7.33196 25.9139 7.53835 24.1748 7.95452V5.34587C25.9139 4.93309 27.4973 4.72331 28.9218 4.72331C32.7992 4.72331 34.7379 6.1579 34.7379 9.02369V17.7733H32.8229L31.6556 16.606C30.5221 17.3842 29.2703 17.7733 27.9034 17.7733C24.7127 17.7733 23.1191 16.4199 23.1191 13.7098ZM28.7864 12.0553C27.203 12.0553 26.4112 12.5932 26.4112 13.6726C26.4112 14.8331 27.0744 15.4117 28.4007 15.4117C29.4936 15.4117 30.5086 15.0733 31.4458 14.3932V12.3056C30.6169 12.1399 29.7304 12.0587 28.7864 12.0587V12.0553Z" fill="#D42C62"/>
+        <path d="M37.3162 5.2579C39.0485 4.90264 40.8789 4.72331 42.8109 4.72331C47.2432 4.72331 49.4594 6.79061 49.4594 10.9252C49.4594 15.4895 47.3955 17.7733 43.271 17.7733C42.3913 17.7733 41.5049 17.5669 40.6116 17.1508V22.4966H37.3195V5.2579H37.3162ZM40.6083 14.3662C41.4271 14.8128 42.3101 15.0361 43.2541 15.0361C45.2165 15.0361 46.2011 13.6556 46.2011 10.8981C46.2011 8.55339 45.115 7.37933 42.9429 7.37933C42.0056 7.37933 41.2274 7.43685 40.6049 7.55188V14.3628L40.6083 14.3662Z" fill="#D42C62"/>
+        <path d="M54.7816 0V2.60865H51.4895V0H54.7816ZM54.7816 4.72331V17.7733H51.4895V4.72331H54.7816Z" fill="#D42C62"/>
+        <path d="M57.2888 2.60865H59.7248L60.2222 4.71993H63.5042V7.32857H60.5842V13.3308C60.5842 14.5489 61.1121 15.1579 62.1643 15.1579H63.5076V17.7665H60.5741C58.3884 17.7665 57.2921 16.5959 57.2921 14.2477V2.60865H57.2888Z" fill="#D42C62"/>
+        <path d="M70.5721 4.72331C74.5342 4.72331 76.5135 6.74662 76.5135 10.7899C76.5135 11.3278 76.4763 11.8658 76.4018 12.4071H67.7402C67.7402 14.2477 69.0902 15.1647 71.7936 15.1647C73.1097 15.1647 74.4293 15.0395 75.7455 14.7925V17.4011C74.5951 17.6481 73.1943 17.7733 71.5432 17.7733C66.8131 17.7733 64.4447 15.547 64.4447 11.0977C64.4447 6.6485 66.4883 4.72331 70.5721 4.72331ZM67.7402 10.1165H73.3094V10.0184C73.3094 8.21166 72.3992 7.30827 70.5755 7.30827C68.7518 7.30827 67.8924 8.24549 67.7402 10.1165Z" fill="#D42C62"/>
+        <path d="M84.0586 4.72331C88.0207 4.72331 90 6.74662 90 10.7899C90 11.3278 89.9628 11.8658 89.8883 12.4071H81.2267C81.2267 14.2477 82.5767 15.1647 85.2801 15.1647C86.5962 15.1647 87.9158 15.0395 89.2319 14.7925V17.4011C88.0816 17.6481 86.6808 17.7733 85.0297 17.7733C80.2996 17.7733 77.9346 15.547 77.9346 11.0977C77.9346 6.6485 79.9782 4.72331 84.062 4.72331H84.0586ZM81.2233 10.1165H86.7925V10.0184C86.7925 8.21166 85.8823 7.30827 84.0586 7.30827C82.2349 7.30827 81.3755 8.24549 81.2233 10.1165Z" fill="#D42C62"/>
+      </svg>
+    </a>
+
+    <div class="nav__links">
+      {navLinks.map(link => (
+        <a href={link.href} class="nav__link">{link.label}</a>
+      ))}
+      <a href={`/${lang === 'zh' ? 'zh/' : ''}`} class="nav__link active">{t(lang, 'nav.blog')}</a>
+    </div>
+
+    <div class="nav__actions">
+      <a href={alternateHref} class="lang-switch" aria-label={t(lang, 'nav.switchAria')}>
+        <svg class="lang-switch__icon" width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M1.5 8h13M8 1.5c1.8 1.7 2.7 3.9 2.7 6.5S9.8 12.8 8 14.5c-1.8-1.7-2.7-3.9-2.7-6.5S6.2 3.2 8 1.5Z" stroke="currentColor" stroke-width="1.3"/>
+        </svg>
+        <span>{t(lang, 'nav.switchTo')}</span>
+      </a>
+      <a href="https://wapitee.io/#contact" class="glass-btn">
+        <span class="glass-btn__text">{t(lang, 'nav.contact')}</span>
+      </a>
+    </div>
+
+    <button class="nav__hamburger" id="nav-hamburger" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <div class="nav__mobile" id="nav-mobile">
+    {navLinks.map(link => (
+      <a href={link.href} class="nav__mobile-link">{link.label}</a>
+    ))}
+    <a href={`/${lang === 'zh' ? 'zh/' : ''}`} class="nav__mobile-link">{t(lang, 'nav.blog')}</a>
+    <a href={alternateHref} class="nav__mobile-link lang-switch__mobile">
+      <svg class="lang-switch__icon" width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/>
+        <path d="M1.5 8h13M8 1.5c1.8 1.7 2.7 3.9 2.7 6.5S9.8 12.8 8 14.5c-1.8-1.7-2.7-3.9-2.7-6.5S6.2 3.2 8 1.5Z" stroke="currentColor" stroke-width="1.3"/>
+      </svg>
+      {t(lang, 'nav.switchTo')}
+    </a>
+    <a href="https://wapitee.io/#contact" class="glass-btn glass-btn--full">
+      <span class="glass-btn__text">{t(lang, 'nav.contact')}</span>
+    </a>
+  </div>
+</header>
+
+<script>
+  const hamburger = document.getElementById('nav-hamburger');
+  const mobileMenu = document.getElementById('nav-mobile');
+  hamburger?.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu?.classList.toggle('open');
+  });
+</script>
+
+<style>
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.6));
+  border-bottom: 1px solid rgba(232, 230, 224, 0.6);
+}
+
+.nav__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+}
+
+.nav__logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* SVG inline — viewBox padded by 1px to prevent W top-left clipping */
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav__link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav__link:hover {
+  color: var(--brand);
+}
+
+.nav__link.active {
+  color: var(--brand);
+}
+
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Language switcher */
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #374151;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.lang-switch:hover {
+  color: var(--brand);
+  border-color: var(--brand);
+}
+
+.lang-switch__icon {
+  flex-shrink: 0;
+}
+
+.lang-switch__mobile {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Glass Button */
+.glass-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.glass-btn:hover {
+  border-color: var(--brand);
+}
+
+.glass-btn:hover .glass-btn__text {
+  color: var(--brand);
+}
+
+.glass-btn:active {
+  background: rgba(212, 44, 98, 0.1);
+  transform: scale(0.98);
+}
+
+.glass-btn__text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  letter-spacing: -0.02em;
+  transition: color 0.3s;
+}
+
+/* Hamburger */
+.nav__hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.nav__hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #374151;
+  transition: all 0.3s;
+}
+
+.nav__hamburger.open span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.nav__hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav__hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Mobile menu — solid white panel (mirrors wapitee.io's mobile nav) */
+.nav__mobile {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0 1.5rem;
+  max-height: 0;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.96);
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.nav__mobile.open {
+  max-height: 480px;
+  padding-bottom: 1.5rem;
+}
+
+.nav__mobile-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  text-decoration: none;
+}
+
+.nav__mobile-link:hover {
+  color: var(--brand);
+}
+
+.glass-btn--full {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+/* 1024px matches the article layout breakpoint: below it the nav bar
+   collapses to logo + hamburger, same behaviour as wapitee.io */
+@media (max-width: 1024px) {
+  .nav__links {
+    display: none;
+  }
+  .nav__actions {
+    display: none;
+  }
+  .nav__hamburger {
+    display: flex;
+  }
+  .nav__mobile {
+    display: flex;
+  }
+}
+</style>

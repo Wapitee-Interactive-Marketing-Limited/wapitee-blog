@@ -1,0 +1,543 @@
+---
+import Nav from '../components/Nav.astro';
+import DebugMeta from './DebugMeta.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+import { t, formatDate, locales, type Lang } from '../i18n/translations';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const prefix = lang === 'zh' ? '/zh' : '';
+
+const posts = (await getCollection('blog'))
+  .filter(post => (post.data.lang ?? 'en') === lang)
+  .filter(post => post.data.status === 'published' || post.data.status === 'review')
+  .sort((a, b) => new Date(b.data.created).getTime() - new Date(a.data.created).getTime());
+
+const featured = posts[0];
+const rest = posts.slice(1);
+
+// Unique topics for the filter bar
+const topics = [...new Set(posts.map(p => p.data.topic))];
+
+const topicLabel = (t2: string) => t2.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+const hrefOf = (slug: string) => `${prefix}/${slug.replace(/^zh\//, '')}`;
+
+// Public URLs under wapitee.io/blog/
+const canonicalURL = new URL(`/blog${prefix}/`, Astro.site);
+const enIndexURL = new URL('/blog/', Astro.site);
+const zhIndexURL = new URL('/blog/zh/', Astro.site);
+---
+
+<!DOCTYPE html>
+<html lang={locales[lang]}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wapitee Blog — Insights on Global Growth & AI Hardware</title>
+  <meta name="description" content="Practical guides and insights on global go-to-market strategy, influencer marketing, e-commerce, and crowdfunding for AI hardware brands." />
+  <link rel="canonical" href={canonicalURL} />
+  <link rel="alternate" hreflang="en" href={enIndexURL} />
+  <link rel="alternate" hreflang="zh" href={zhIndexURL} />
+  <link rel="alternate" hreflang="x-default" href={enIndexURL} />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Wapitee Blog" />
+  <meta property="og:description" content="Practical guides and insights on global growth, GTM strategy, and e-commerce." />
+  <meta property="og:locale" content={locales[lang].replace('-', '_')} />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <Nav lang={lang} alternateHref={lang === 'zh' ? '/' : '/zh/'} />
+
+  {/* Meta/OG inspector — only renders when ?debug is in the URL */}
+  <DebugMeta />
+
+  <main class="blog-index">
+    <!-- Hero -->
+    <section class="index-hero">
+      <div class="index-hero__glow" aria-hidden="true"></div>
+      <div class="index-container index-hero__inner">
+        <h1 class="index-hero__title">
+          {t(lang, 'index.title.1')}<br /><em class="index-hero__accent">{t(lang, 'index.title.2')}</em>
+        </h1>
+        <p class="index-hero__desc">
+          {t(lang, 'index.desc')}
+        </p>
+      </div>
+    </section>
+
+    <div class="index-container">
+      {posts.length === 0 ? (
+        <div class="empty-state">
+          <h2>{t(lang, 'index.noArticles.title')}</h2>
+          <p>{t(lang, 'index.noArticles.desc')}</p>
+        </div>
+      ) : (
+        <>
+          {/* Topic filter tabs */}
+          <nav class="topic-tabs" aria-label="Filter by topic">
+            <button class="topic-tabs__item is-active" data-filter="all">{t(lang, 'index.allPosts')}</button>
+            {topics.map(topic => (
+              <button class="topic-tabs__item" data-filter={topic}>{topicLabel(topic)}</button>
+            ))}
+          </nav>
+
+          {/* Featured post */}
+          {featured && (
+            <article class="featured" data-topic-card={featured.data.topic}>
+              <a class="featured__media" href={hrefOf(featured.slug)} tabindex="-1" aria-hidden="true">
+                {featured.data.cover ? (
+                  <img src={featured.data.cover} alt={featured.data.title} loading="eager" />
+                ) : (
+                  <div class="featured__placeholder"></div>
+                )}
+              </a>
+              <div class="featured__body">
+                <p class="featured__badge">
+                  <span class="featured__badge-label">{t(lang, 'index.featured')}</span>
+                  <span class="featured__badge-dot">&bull;</span>
+                  <span class="featured__badge-topic">{topicLabel(featured.data.topic)}</span>
+                </p>
+                <h2 class="featured__title">
+                  <a href={hrefOf(featured.slug)}>{featured.data.title}</a>
+                </h2>
+                <p class="featured__summary">{featured.data.summary}</p>
+                <a class="featured__cta" href={hrefOf(featured.slug)}>
+                  {t(lang, 'index.readArticle')}
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </div>
+            </article>
+          )}
+
+          {/* Grid of other posts */}
+          {rest.length > 0 && (
+            <div class="post-grid">
+              {rest.map(post => (
+                <article class="post-card" data-topic-card={post.data.topic}>
+                  <a class="post-card__media" href={hrefOf(post.slug)} tabindex="-1" aria-hidden="true">
+                    {post.data.cover ? (
+                      <img src={post.data.cover} alt={post.data.title} loading="lazy" />
+                    ) : (
+                      <div class="post-card__placeholder"></div>
+                    )}
+                  </a>
+                  <p class="post-card__meta">
+                    <span class="post-card__topic">{topicLabel(post.data.topic)}</span>
+                    <span class="post-card__dot">&middot;</span>
+                    <span class="post-card__date">{formatDate(lang, post.data.created, 'short')}</span>
+                  </p>
+                  <h3 class="post-card__title">
+                    <a href={hrefOf(post.slug)}>{post.data.title}</a>
+                  </h3>
+                  <p class="post-card__summary">{post.data.summary}</p>
+                </article>
+              ))}
+            </div>
+          )}
+
+          {/* Shown when a filter matches nothing */}
+          <div class="filter-empty" id="filter-empty" hidden>
+            <p>{t(lang, 'index.filterEmpty')}</p>
+          </div>
+        </>
+      )}
+    </div>
+  </main>
+
+  <Footer lang={lang} />
+
+  <script>
+    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const cards = document.querySelectorAll<HTMLElement>('[data-topic-card]');
+    const empty = document.getElementById('filter-empty');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter!;
+        buttons.forEach(b => b.classList.toggle('is-active', b === btn));
+        cards.forEach(card => {
+          card.hidden = filter !== 'all' && card.dataset.topicCard !== filter;
+        });
+        if (empty) empty.hidden = [...cards].some(c => !c.hidden);
+      });
+    });
+  </script>
+</body>
+</html>
+
+<style>
+.blog-index {
+  min-height: 60vh;
+}
+
+/* ---- Container ---- */
+.index-container {
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---- Hero ---- */
+.index-hero {
+  position: relative;
+  padding: 5rem 0 3rem;
+  overflow: hidden;
+}
+
+.index-hero__glow {
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(760px, 90vw);
+  height: 320px;
+  background: radial-gradient(ellipse at top, rgba(212, 44, 98, 0.14), rgba(255, 107, 157, 0.05) 55%, transparent 75%);
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+.index-hero__inner {
+  position: relative;
+}
+
+.index-hero__title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.6rem, 6vw, 4.2rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+}
+
+.index-hero__accent {
+  font-style: italic;
+  font-weight: 500;
+  background: linear-gradient(135deg, var(--brand), var(--brand-light));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.index-hero__desc {
+  font-size: 1.35rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 720px;
+}
+
+/* ---- Topic filter tabs ---- */
+.topic-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 3rem;
+}
+
+.topic-tabs__item {
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink-mute);
+  padding: 0 0 12px;
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.topic-tabs__item:hover {
+  color: var(--ink);
+}
+
+.topic-tabs__item.is-active {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+/* ---- Featured post ---- */
+.featured {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  margin-bottom: 4rem;
+}
+
+.featured[hidden] {
+  display: none;
+}
+
+.featured__media {
+  display: block;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-tint);
+  aspect-ratio: 16 / 10;
+}
+
+.featured__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.featured__media:hover img {
+  transform: scale(1.02);
+}
+
+.featured__placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--brand-gradient);
+  opacity: 0.9;
+}
+
+.featured__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.featured__badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.featured__badge-label {
+  color: var(--brand);
+}
+
+.featured__badge-dot {
+  color: var(--ink-faint);
+}
+
+.featured__badge-topic {
+  color: var(--ink-soft);
+}
+
+.featured__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 3vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+
+.featured__title a {
+  color: var(--ink);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.featured__title a:hover {
+  color: var(--brand);
+}
+
+.featured__summary {
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin-bottom: 1.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.featured__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+  transition: color 0.2s;
+}
+
+.featured__cta:hover {
+  color: var(--brand);
+}
+
+/* ---- Post Grid ---- */
+.post-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem 1.5rem;
+  padding-bottom: 4rem;
+}
+
+.post-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-card[hidden] {
+  display: none;
+}
+
+.post-card__media {
+  display: block;
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-tint);
+  margin-bottom: 0.9rem;
+}
+
+.post-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.post-card__media:hover img {
+  transform: scale(1.03);
+}
+
+.post-card__placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--brand-gradient);
+  opacity: 0.85;
+}
+
+.post-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  margin-bottom: 0.4rem;
+}
+
+.post-card__topic {
+  color: var(--brand);
+}
+
+.post-card__dot {
+  color: var(--ink-faint);
+}
+
+.post-card__date {
+  color: var(--ink-mute);
+  font-weight: 400;
+}
+
+.post-card__title {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  margin-bottom: 0.4rem;
+}
+
+.post-card__title a {
+  color: var(--ink);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.post-card__title a:hover {
+  color: var(--brand);
+}
+
+.post-card__summary {
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---- Empty states ---- */
+.empty-state,
+.filter-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.empty-state h2 {
+  font-family: var(--font-heading);
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p,
+.filter-empty p {
+  color: var(--ink-mute);
+}
+
+/* ---- Responsive ---- */
+@media (min-width: 768px) {
+  .featured {
+    flex-direction: row;
+    gap: 3.5rem;
+  }
+  .featured__media {
+    width: 55%;
+    flex-shrink: 0;
+    aspect-ratio: auto;
+    min-height: 420px;
+  }
+  .featured__body {
+    flex: 1;
+  }
+  .post-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .post-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .index-hero {
+    padding: 3.5rem 0 2rem;
+  }
+  .index-hero__desc {
+    font-size: 1.1rem;
+  }
+}
+</style>
