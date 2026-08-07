@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { t, type Lang } from '../i18n/translations';
+import { BASE } from '../utils/base';
 
 interface Props {
   posts: CollectionEntry<'blog'>[];
@@ -9,9 +10,9 @@ interface Props {
 
 const { posts, lang = 'en' } = Astro.props;
 
-// Collection slugs of zh posts are prefixed with "zh/" — this maps
-// directly onto the site's /zh/<slug> public route.
-const hrefOf = (post: CollectionEntry<'blog'>) => `/${post.slug}`;
+// Collection slugs of zh posts are prefixed with "zh/" — prepending BASE
+// maps them directly onto the site's /blog/zh/<slug> public route.
+const hrefOf = (post: CollectionEntry<'blog'>) => `${BASE}${post.slug}`;
 ---
 
 <aside class="related-card">
