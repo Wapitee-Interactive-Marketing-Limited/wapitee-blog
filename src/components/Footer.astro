@@ -1,5 +1,6 @@
 ---
 import { t, type Lang } from '../i18n/translations';
+import { BASE } from '../utils/base';
 
 interface Props {
   lang?: Lang;
@@ -58,7 +59,7 @@ const DISPLAY_YEAR = String(year).slice(-2);
         <div class="footer__col">
           <nav class="footer__nav">
             <a href="https://wapitee.io" class="footer__nav-link">{t(lang, 'footer.home')}</a>
-            <a href={lang === 'zh' ? '/zh/' : '/'} class="footer__nav-link">{t(lang, 'footer.blog')}</a>
+            <a href={lang === 'zh' ? `${BASE}zh/` : BASE} class="footer__nav-link">{t(lang, 'footer.blog')}</a>
           </nav>
         </div>
 
