@@ -4,9 +4,9 @@ status: "published"
 brand: "wapitee"
 topic: "shopify"
 tags: ["Shopify", "Partner Access", "Collaborator", "Security", "Agency Collaboration"]
-created: "2026-08-06"
-updated: "2026-08-06"
-verified: "2026-08-06"
+created: "2026-06-18"
+updated: "2026-06-25"
+verified: "2026-06-25"
 sources:
   - name: "Shopify Help Center — Collaborator Request Codes"
     url: "https://help.shopify.com/en/manual/your-account/staff-accounts/collaborator-accounts/collaborator-request-codes"

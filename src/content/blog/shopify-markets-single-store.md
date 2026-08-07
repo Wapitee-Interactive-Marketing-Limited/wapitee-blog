@@ -4,9 +4,9 @@ status: "published"
 brand: "wapitee"
 topic: "shopify"
 tags: ["Shopify", "Markets", "i18n", "Global Commerce"]
-created: "2026-08-04"
-updated: "2026-08-05"
-verified: "2026-08-05"
+created: "2026-06-09"
+updated: "2026-06-16"
+verified: "2026-06-16"
 sources:
   - name: "Shopify Help Center — Managed Markets Requirements"
     url: "https://help.shopify.com/zh-CN/manual/markets/markets-pro/requirements-and-considerations"
@@ -56,7 +56,7 @@ summary: "Shopify Markets lets a single store manage up to 50 markets with autom
 | 5 | Managed Markets (cross-border) also does not support multiple business entities in a single store | Shopify Help Center |
 | 6 | Multi-currency payments are settled in the company's home currency, creating forced FX conversion | Shopify / Wapitee Experience |
 | 7 | Pricing capabilities are tiered by plan: Basic is limited; Grow+ unlocks full features | LitOS / Charle |
-| 8 | Using a third-party payment processor (Airwallex/PingPong) loses Markets' **multi-currency checkout** (all markets pay in store default currency); but **language/translation/URL localization still work fully** | Shopify Help Center (2026-08-05) |
+| 8 | Using a third-party payment processor (Airwallex/PingPong) loses Markets' **multi-currency checkout** (all markets pay in store default currency); but **language/translation/URL localization still work fully** | Shopify Help Center (2026-06-12) |
 
 ---
 

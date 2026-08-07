@@ -5,9 +5,9 @@ brand: "wapitee"
 topic: "shopify"
 lang: "zh"
 tags: ["Shopify", "Markets", "多语言", "全球电商"]
-created: "2026-08-04"
-updated: "2026-08-05"
-verified: "2026-08-05"
+created: "2026-06-09"
+updated: "2026-06-16"
+verified: "2026-06-16"
 sources:
   - name: "Shopify Help Center — Managed Markets Requirements"
     url: "https://help.shopify.com/zh-CN/manual/markets/markets-pro/requirements-and-considerations"
@@ -57,7 +57,7 @@ summary: "Shopify Markets 让单个店铺最多管理 50 个市场，自动适�
 | 5 | Managed Markets（跨境托管）同样不支持单店多商业主体 | Shopify Help Center |
 | 6 | 多币种收款最终以公司注册地货币结算，会产生强制换汇 | Shopify / Wapitee 经验 |
 | 7 | 定价能力按套餐分级：Basic 受限；Grow+ 解锁完整功能 | LitOS / Charle |
-| 8 | 使用第三方支付（Airwallex/PingPong）会失去 Markets 的**多币种结账**（所有市场以店铺默认货币支付）；但**语言/翻译/URL 本地化完全不受影响** | Shopify Help Center（2026-08-05） |
+| 8 | 使用第三方支付（Airwallex/PingPong）会失去 Markets 的**多币种结账**（所有市场以店铺默认货币支付）；但**语言/翻译/URL 本地化完全不受影响** | Shopify Help Center（2026-06-12） |
 
 ---
 
