@@ -71,9 +71,36 @@ Based on `design/wapitee.md`:
 
 ## SEO Features
 
-- ✅ Canonical URLs (all point to wapitee.io/blog/...)
+- ✅ Canonical URLs (all point to www.wapitee.io/blog...; apex 307-redirects to www)
 - ✅ Article schema structured data (JSON-LD)
 - ✅ Open Graph + Twitter cards
 - ✅ Auto-generated sitemap.xml
 - ✅ robots.txt pointing to sitemap
 - ✅ Semantic HTML, fast static generation
+
+## Publishing Checklist (per article)
+
+Sitemap / RSS / JSON-LD / hreflang are **auto-generated at build time** from
+`src/content/blog/` — there is no manual sitemap editing. Pushing to `main`
+redeploys and regenerates everything. Per article:
+
+1. **Frontmatter**: `title` (≤60 chars EN / ≤30 chars ZH for SERP safety),
+   `summary`, `lang`, `topic`, `tags`, `status: published`, `created`,
+   `updated`, and `cover` if applicable.
+2. **Cover image**: drop the PNG into `public/covers/<slug>.png` and commit it
+   to git. Reference it in frontmatter as `cover: "/covers/<slug>.png"`.
+   Templates resolve it through the `asset()` helper in `src/utils/base.ts`,
+   which prefixes the `/blog` base. **Never reference public/ assets with raw
+   absolute paths** — under `base: '/blog'` they 404 in production.
+3. **Bilingual**: ship both EN (`<slug>.md`) and ZH (`zh/<slug>.md`) versions;
+   hreflang alternates are picked up automatically.
+4. **Knowledge source of truth**: sync the article body to
+   `knowledge/shopify/<slug>/source.md` (bidirectional sync convention).
+5. **llms.txt**: add the new article (bilingual URLs + one-line summary) to
+   `public/llms.txt` manually — it is a static file, not auto-generated.
+6. **After deploy** (optional, speeds up indexing): resubmit
+   `blog/sitemap.xml` in Google Search Console and request indexing for the
+   new URLs; same in Bing Webmaster Tools.
+
+No external image hosting (OSS / R2) is needed: images live in the repo and
+are served through Vercel's CDN.

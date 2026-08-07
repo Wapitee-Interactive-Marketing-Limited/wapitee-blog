@@ -4,7 +4,7 @@ import DebugMeta from './DebugMeta.astro';
 import Footer from '../components/Footer.astro';
 import { getCollection } from 'astro:content';
 import { t, formatDate, locales, type Lang } from '../i18n/translations';
-import { BASE } from '../utils/base';
+import { BASE, asset } from '../utils/base';
 
 interface Props {
   lang?: Lang;
@@ -134,7 +134,7 @@ const isoDT = (d: string) => (d.includes('T') ? d : `${d}T09:00:00+08:00`);
             <article class="featured" data-topic-card={featured.data.topic}>
               <a class="featured__media" href={hrefOf(featured.slug)} tabindex="-1" aria-hidden="true">
                 {featured.data.cover ? (
-                  <img src={featured.data.cover} alt={featured.data.title} loading="eager" />
+                  <img src={asset(featured.data.cover)} alt={featured.data.title} loading="eager" />
                 ) : (
                   <div class="featured__placeholder"></div>
                 )}
@@ -166,7 +166,7 @@ const isoDT = (d: string) => (d.includes('T') ? d : `${d}T09:00:00+08:00`);
                 <article class="post-card" data-topic-card={post.data.topic}>
                   <a class="post-card__media" href={hrefOf(post.slug)} tabindex="-1" aria-hidden="true">
                     {post.data.cover ? (
-                      <img src={post.data.cover} alt={post.data.title} loading="lazy" />
+                      <img src={asset(post.data.cover)} alt={post.data.title} loading="lazy" />
                     ) : (
                       <div class="post-card__placeholder"></div>
                     )}
