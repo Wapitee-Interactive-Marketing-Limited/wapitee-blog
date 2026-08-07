@@ -18,3 +18,7 @@ npm-debug.log*
 # editor
 .vscode/
 .idea/
+.vercel
+
+# vercel deploy temp scripts
+.vercel-tmp/
