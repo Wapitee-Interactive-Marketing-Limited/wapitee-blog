@@ -439,11 +439,13 @@ img {
   flex: none;
   width: 1.5rem;
   height: 1.5rem;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1; /* kill inherited 1.7 line-height — it offsets the glyph inside the circle */
   border: 1px solid var(--line-strong);
   border-radius: 50%;
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 400;
   color: var(--ink-soft);
   transition: transform 0.25s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
