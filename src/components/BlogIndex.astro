@@ -32,6 +32,10 @@ const hrefOf = (slug: string) => `${BASE}${lang === 'zh' ? 'zh/' : ''}${slug.rep
 const canonicalURL = new URL(`/blog${prefix}/`, Astro.site);
 const enIndexURL = new URL('/blog/', Astro.site);
 const zhIndexURL = new URL('/blog/zh/', Astro.site);
+
+// Full ISO 8601 datetimes for structured data (date-only frontmatter
+// values trigger "missing timezone" warnings in Rich Results Test)
+const isoDT = (d: string) => (d.includes('T') ? d : `${d}T09:00:00+08:00`);
 ---
 
 <!DOCTYPE html>
@@ -73,8 +77,8 @@ const zhIndexURL = new URL('/blog/zh/', Astro.site);
         "description": p.data.summary,
         "url": new URL(`/blog/${p.slug}`, Astro.site).toString(),
         "inLanguage": (p.data.lang ?? 'en') === 'zh' ? 'zh-CN' : 'en',
-        "datePublished": p.data.created,
-        "dateModified": p.data.updated || p.data.created
+        "datePublished": isoDT(p.data.created),
+        "dateModified": isoDT(p.data.updated || p.data.created)
       }
     }))
   })} />
