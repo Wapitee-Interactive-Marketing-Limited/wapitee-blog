@@ -116,7 +116,14 @@ summary: "Shopify 协作者（Collaborator）权限让 Wapitee 在不占用员�
 
 ### 第 1 步：设置协作者请求码
 
-进入 **Settings → Users and permissions → Collaborators**，点击「Enable collaborator request code」。Shopify 会生成一个 4 位数字码（如 `4821`）。把这个码发给我们。
+进入 **Settings → Users and permissions → Collaborators**，点击「Enable collaborator request code」。Shopify 会生成一个 4 位数字码（如 `4821`）。
+
+然后把**两样东西**发给我们：
+
+1. 4 位请求码
+2. 店铺的 `myshopify.com` 域名（如 `yourstore.myshopify.com`）——在后台 URL 或 **Settings → Store details** 里可以看到
+
+只有 4 位码是不够的：我们的 Partner 后台必须知道店铺域名，才能向正确的店铺发起协作请求。
 
 ### 第 2 步：批准我们的请求
 

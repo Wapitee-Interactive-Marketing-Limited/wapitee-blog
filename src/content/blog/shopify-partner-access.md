@@ -115,7 +115,14 @@ You only need to do **two things** on your end — takes about five minutes in t
 
 ### Step 1: Set Up a Collaborator Request Code
 
-Go to **Settings → Users and permissions → Collaborators**. Click "Enable collaborator request code." Shopify generates a 4-digit code (e.g., `4821`). Share this code with us.
+Go to **Settings → Users and permissions → Collaborators**. Click "Enable collaborator request code." Shopify generates a 4-digit code (e.g., `4821`).
+
+Then share **two things** with us:
+
+1. The 4-digit code
+2. Your store's `myshopify.com` domain (e.g., `yourstore.myshopify.com`) — visible in your admin URL or under **Settings → Store details**
+
+The code alone isn't enough: our Partner Dashboard needs the store domain to know which store to send the collaborator request to.
 
 ### Step 2: Approve Our Request
 
