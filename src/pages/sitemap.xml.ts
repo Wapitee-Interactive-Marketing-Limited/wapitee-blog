@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 
 export const GET: APIRoute = async ({ site }) => {
   const posts = await getCollection('blog');
-  const baseUrl = site?.toString().replace(/\/$/, '') || 'https://wapitee.io';
+  const baseUrl = site?.toString().replace(/\/$/, '') || 'https://www.wapitee.io';
   // Index lastmod = newest article date (ISO strings compare lexicographically),
   // so it stays stable across redeployments instead of leaking the build date.
   const lastmod = posts
@@ -21,8 +21,9 @@ export const GET: APIRoute = async ({ site }) => {
     }
     <xhtml:link rel="alternate" hreflang="x-default" href="${enUrl}"/>`;
 
+  // Index URLs without trailing slash (Vercel 308-redirects /blog/ -> /blog)
   const indexEntry = `  <url>
-    <loc>${baseUrl}/blog/</loc>${alternates(`${baseUrl}/blog/`, `${baseUrl}/blog/zh/`)}
+    <loc>${baseUrl}/blog</loc>${alternates(`${baseUrl}/blog`, `${baseUrl}/blog/zh`)}
     <lastmod>${lastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>

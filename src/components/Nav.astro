@@ -12,11 +12,11 @@ interface Props {
 const { lang = 'en', alternateHref = '/zh' } = Astro.props;
 
 const navLinks = [
-  { href: "https://wapitee.io", label: "HOME" },
-  { href: "https://wapitee.io/#web", label: "WEB" },
-  { href: "https://wapitee.io/#strategy", label: "STRATEGY" },
-  { href: "https://wapitee.io/#influencer", label: "INFLUENCER" },
-  { href: "https://wapitee.io/#about", label: "ABOUT" },
+  { href: "https://www.wapitee.io", label: "HOME" },
+  { href: "https://www.wapitee.io/#web", label: "WEB" },
+  { href: "https://www.wapitee.io/#strategy", label: "STRATEGY" },
+  { href: "https://www.wapitee.io/#influencer", label: "INFLUENCER" },
+  { href: "https://www.wapitee.io/#about", label: "ABOUT" },
 ];
 ---
 
@@ -49,7 +49,7 @@ const navLinks = [
         </svg>
         <span>{t(lang, 'nav.switchTo')}</span>
       </a>
-      <a href="https://wapitee.io/#contact" class="glass-btn">
+      <a href="https://www.wapitee.io/#contact" class="glass-btn">
         <span class="glass-btn__text">{t(lang, 'nav.contact')}</span>
       </a>
     </div>
@@ -73,7 +73,7 @@ const navLinks = [
       </svg>
       {t(lang, 'nav.switchTo')}
     </a>
-    <a href="https://wapitee.io/#contact" class="glass-btn glass-btn--full">
+    <a href="https://www.wapitee.io/#contact" class="glass-btn glass-btn--full">
       <span class="glass-btn__text">{t(lang, 'nav.contact')}</span>
     </a>
   </div>

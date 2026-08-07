@@ -28,10 +28,11 @@ const topicLabel = (t2: string) => t2.replace(/-/g, ' ').replace(/\b\w/g, c => c
 
 const hrefOf = (slug: string) => `${BASE}${lang === 'zh' ? 'zh/' : ''}${slug.replace(/^zh\//, '')}`;
 
-// Public URLs under wapitee.io/blog/
-const canonicalURL = new URL(`/blog${prefix}/`, Astro.site);
-const enIndexURL = new URL('/blog/', Astro.site);
-const zhIndexURL = new URL('/blog/zh/', Astro.site);
+// Public URLs under www.wapitee.io/blog (no trailing slash: Vercel
+// 308-redirects /blog/ -> /blog, so slash URLs would be redirected canonicals)
+const canonicalURL = new URL(`/blog${prefix}`, Astro.site);
+const enIndexURL = new URL('/blog', Astro.site);
+const zhIndexURL = new URL('/blog/zh', Astro.site);
 
 // Full ISO 8601 datetimes for structured data (date-only frontmatter
 // values trigger "missing timezone" warnings in Rich Results Test)
@@ -61,7 +62,7 @@ const isoDT = (d: string) => (d.includes('T') ? d : `${d}T09:00:00+08:00`);
     "publisher": {
       "@type": "Organization",
       "name": "Wapitee",
-      "url": "https://wapitee.io"
+      "url": "https://www.wapitee.io"
     }
   })} />
   <script type="application/ld+json" set:html={JSON.stringify({

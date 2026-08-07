@@ -102,12 +102,12 @@ const modifiedISO = isoDT(data.updated || data.created);
     "author": {
       "@type": "Organization",
       "name": "Wapitee",
-      "url": "https://wapitee.io"
+      "url": "https://www.wapitee.io"
     },
     "publisher": {
       "@type": "Organization",
       "name": "Wapitee",
-      "url": "https://wapitee.io"
+      "url": "https://www.wapitee.io"
     },
     "mainEntityOfPage": canonicalURL.toString()
   })} />
@@ -121,7 +121,7 @@ const modifiedISO = isoDT(data.updated || data.created);
         "@type": "ListItem",
         "position": 1,
         "name": lang === 'zh' ? '博客' : 'Blog',
-        "item": new URL(`/blog${prefix}/`, Astro.site).toString()
+        "item": new URL(`/blog${prefix}`, Astro.site).toString()
       },
       {
         "@type": "ListItem",

@@ -5,20 +5,20 @@
 > strategy, and e-commerce growth. Every article ships in English and
 > Simplified Chinese; the English version is canonical.
 
-Site: https://wapitee.io/blog/
-Sitemap: https://wapitee.io/blog/sitemap.xml
-RSS: https://wapitee.io/blog/rss.xml
+Site: https://www.wapitee.io/blog
+Sitemap: https://www.wapitee.io/blog/sitemap.xml
+RSS: https://www.wapitee.io/blog/rss.xml
 
 ## Articles
 
-- [Grant Partner Access to Your Shopify Store (2026 Guide)](https://wapitee.io/blog/shopify-partner-access)
-  ([中文](https://wapitee.io/blog/zh/shopify-partner-access)): How Shopify
+- [Grant Partner Access to Your Shopify Store (2026 Guide)](https://www.wapitee.io/blog/shopify-partner-access)
+  ([中文](https://www.wapitee.io/blog/zh/shopify-partner-access)): How Shopify
   Collaborator Access works — the 2-step authorization flow, collaborator
   request codes, permission categories, and security best practices for
   letting an agency or freelancer work on your store without staff seats.
 
-- [Shopify Markets: Sell Globally from One Store (2026 Guide)](https://wapitee.io/blog/shopify-markets-single-store)
-  ([中文](https://wapitee.io/blog/zh/shopify-markets-single-store)): What
+- [Shopify Markets: Sell Globally from One Store (2026 Guide)](https://www.wapitee.io/blog/shopify-markets-single-store)
+  ([中文](https://www.wapitee.io/blog/zh/shopify-markets-single-store)): What
   Shopify Markets can and cannot do from a single store — up to 50 markets
   with automatic language, currency, and domain adaptation, and why
   local-entity sales (e.g., Japan) still require separate stores.

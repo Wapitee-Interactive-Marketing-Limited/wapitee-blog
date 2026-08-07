@@ -13,7 +13,7 @@ const escapeXml = (s: string) =>
 // Each item carries an atom:link alternate pointing at its zh counterpart
 // so aggregators can discover both language versions.
 export const GET: APIRoute = async ({ site }) => {
-  const baseUrl = site?.toString().replace(/\/$/, '') || 'https://wapitee.io';
+  const baseUrl = site?.toString().replace(/\/$/, '') || 'https://www.wapitee.io';
 
   const posts = (await getCollection('blog'))
     .filter(p => (p.data.lang ?? 'en') === 'en')
@@ -41,9 +41,9 @@ export const GET: APIRoute = async ({ site }) => {
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Wapitee Blog</title>
-    <link>${baseUrl}/blog/</link>
+    <link>${baseUrl}/blog</link>
     <atom:link href="${baseUrl}/blog/rss.xml" rel="self" type="application/rss+xml"/>
-    <atom:link href="${baseUrl}/blog/zh/" rel="alternate" hreflang="zh"/>
+    <atom:link href="${baseUrl}/blog/zh" rel="alternate" hreflang="zh"/>
     <description>Practical guides on global go-to-market strategy, Shopify operations, and e-commerce growth.</description>
     <language>en</language>
     <lastBuildDate>${posts.length ? new Date(posts[0].data.created).toUTCString() : new Date().toUTCString()}</lastBuildDate>
