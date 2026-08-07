@@ -229,6 +229,11 @@ const zhIndexURL = new URL('/blog/zh/', Astro.site);
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
+  /* Italic glyphs lean right beyond the content box, but background-clip
+     paints only inside the box — the padding widens the clip region so the
+     trailing italic stroke (e.g. the "l" in "global") isn't sliced off */
+  padding-right: 0.12em;
+  margin-right: -0.12em;
 }
 
 .index-hero__desc {
