@@ -4,7 +4,12 @@ import { getCollection } from 'astro:content';
 export const GET: APIRoute = async ({ site }) => {
   const posts = await getCollection('blog');
   const baseUrl = site?.toString().replace(/\/$/, '') || 'https://wapitee.io';
-  const lastmod = new Date().toISOString().split('T')[0];
+  // Index lastmod = newest article date (ISO strings compare lexicographically),
+  // so it stays stable across redeployments instead of leaking the build date.
+  const lastmod = posts
+    .map(p => p.data.updated || p.data.created || '')
+    .sort()
+    .pop() || new Date().toISOString().split('T')[0];
 
   // English is the default locale (no /zh prefix); zh articles live under /zh/
   const enPosts = posts.filter(p => (p.data.lang ?? 'en') === 'en');
