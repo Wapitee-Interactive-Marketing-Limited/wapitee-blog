@@ -104,7 +104,7 @@ const coverURL = data.cover ? new URL(`/blog${data.cover}`, Astro.site) : null;
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <Nav lang={lang} alternateHref={lang === 'zh' ? `/${baseSlug}` : `/zh/${baseSlug}`} />
+  <Nav lang={lang} alternateHref={lang === 'zh' ? `${import.meta.env.BASE_URL}${baseSlug}` : `${import.meta.env.BASE_URL}zh/${baseSlug}`} />
 
   {/* Meta/OG inspector — only renders when ?debug is in the URL */}
   <DebugMeta />

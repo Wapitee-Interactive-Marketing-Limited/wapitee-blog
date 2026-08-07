@@ -39,7 +39,7 @@ summary: "Shopify 协作者（Collaborator）权限让 Wapitee 在不占用员�
 > **要点**
 > 协作者权限就像一张**带房间权限的访客卡**——我们可以进入你批准的区域，但永远进不了保险库。
 
-![协作者权限如同访客卡：批准的区域可进入，保险库始终上锁](/images/partner-access/guest-pass.png)
+![协作者权限如同访客卡：批准的区域可进入，保险库始终上锁](/blog/images/partner-access/guest-pass.png)
 
 ---
 

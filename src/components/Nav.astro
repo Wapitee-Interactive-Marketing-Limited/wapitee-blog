@@ -21,7 +21,7 @@ const navLinks = [
 
 <header class="nav">
   <nav class="nav__inner">
-    <a href="/" class="nav__logo">
+    <a href={import.meta.env.BASE_URL} class="nav__logo">
       <svg width="110" height="28" viewBox="-1 -1 92 25" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Wapitee">
         <path d="M0 0H3.34286L5.24436 12.7658L9.86955 0H13.0398L17.3639 12.2684L19.3771 0H22.6218L19.2789 17.7733H16.1459L11.2601 3.83008L6.01579 17.7733H2.91992L0 0Z" fill="#D42C62"/>
         <path d="M23.1191 13.7098C23.1191 11.1147 25.0071 9.8188 28.7864 9.8188C29.6729 9.8188 30.5594 9.90339 31.4458 10.0658V9.08459C31.4458 7.9173 30.6034 7.33196 28.9218 7.33196C27.4973 7.33196 25.9139 7.53835 24.1748 7.95452V5.34587C25.9139 4.93309 27.4973 4.72331 28.9218 4.72331C32.7992 4.72331 34.7379 6.1579 34.7379 9.02369V17.7733H32.8229L31.6556 16.606C30.5221 17.3842 29.2703 17.7733 27.9034 17.7733C24.7127 17.7733 23.1191 16.4199 23.1191 13.7098ZM28.7864 12.0553C27.203 12.0553 26.4112 12.5932 26.4112 13.6726C26.4112 14.8331 27.0744 15.4117 28.4007 15.4117C29.4936 15.4117 30.5086 15.0733 31.4458 14.3932V12.3056C30.6169 12.1399 29.7304 12.0587 28.7864 12.0587V12.0553Z" fill="#D42C62"/>
@@ -37,7 +37,7 @@ const navLinks = [
       {navLinks.map(link => (
         <a href={link.href} class="nav__link">{link.label}</a>
       ))}
-      <a href={`/${lang === 'zh' ? 'zh/' : ''}`} class="nav__link active">{t(lang, 'nav.blog')}</a>
+      <a href={lang === 'zh' ? `${import.meta.env.BASE_URL}zh/` : import.meta.env.BASE_URL} class="nav__link active">{t(lang, 'nav.blog')}</a>
     </div>
 
     <div class="nav__actions">
@@ -64,7 +64,7 @@ const navLinks = [
     {navLinks.map(link => (
       <a href={link.href} class="nav__mobile-link">{link.label}</a>
     ))}
-    <a href={`/${lang === 'zh' ? 'zh/' : ''}`} class="nav__mobile-link">{t(lang, 'nav.blog')}</a>
+    <a href={lang === 'zh' ? `${import.meta.env.BASE_URL}zh/` : import.meta.env.BASE_URL} class="nav__mobile-link">{t(lang, 'nav.blog')}</a>
     <a href={alternateHref} class="nav__mobile-link lang-switch__mobile">
       <svg class="lang-switch__icon" width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
         <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/>

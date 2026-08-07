@@ -38,7 +38,7 @@ When you work with Wapitee, we need access to your Shopify admin to implement ch
 > **Key Point**
 > Collaborator access is like a **guest pass with specific room permissions** — we can enter the rooms you approve, but never the vault.
 
-![Collaborator access works like a guest pass — approved rooms open, the vault stays locked](/images/partner-access/guest-pass.png)
+![Collaborator access works like a guest pass — approved rooms open, the vault stays locked](/blog/images/partner-access/guest-pass.png)
 
 ---
 
