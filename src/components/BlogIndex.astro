@@ -45,6 +45,31 @@ const zhIndexURL = new URL('/blog/zh/', Astro.site);
   <link rel="alternate" hreflang="en" href={enIndexURL} />
   <link rel="alternate" hreflang="zh" href={zhIndexURL} />
   <link rel="alternate" hreflang="x-default" href={enIndexURL} />
+  <link rel="alternate" type="application/rss+xml" title="Wapitee Blog" href={new URL('/blog/rss.xml', Astro.site)} />
+
+  <!-- Index structured data: Blog + ItemList of published posts -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "Wapitee Blog",
+    "url": canonicalURL.toString(),
+    "inLanguage": lang === 'zh' ? 'zh-CN' : 'en',
+    "publisher": {
+      "@type": "Organization",
+      "name": "Wapitee",
+      "url": "https://wapitee.io"
+    },
+    "blogPost": posts.map((p, i) => ({
+      "@type": "BlogPosting",
+      "position": i + 1,
+      "headline": p.data.title,
+      "description": p.data.summary,
+      "url": new URL(`/blog/${p.slug}`, Astro.site).toString(),
+      "inLanguage": (p.data.lang ?? 'en') === 'zh' ? 'zh-CN' : 'en',
+      "datePublished": p.data.created,
+      "dateModified": p.data.updated || p.data.created
+    }))
+  })} />
 
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Wapitee Blog" />

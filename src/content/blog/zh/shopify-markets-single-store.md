@@ -1,5 +1,5 @@
 ---
-title: "Shopify Markets：如何用一个店铺卖向全球（2026 完整指南）"
+title: "Shopify Markets：用一个店铺卖向全球（2026 指南）"
 status: "published"
 brand: "wapitee"
 topic: "shopify"

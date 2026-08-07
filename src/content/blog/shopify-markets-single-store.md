@@ -1,5 +1,5 @@
 ---
-title: "Shopify Markets: How to Sell Globally from a Single Store (Complete 2026 Guide)"
+title: "Shopify Markets: Sell Globally from One Store (2026 Guide)"
 status: "published"
 brand: "wapitee"
 topic: "shopify"

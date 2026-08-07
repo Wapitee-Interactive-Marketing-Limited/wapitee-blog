@@ -68,7 +68,11 @@ const coverURL = data.cover ? new URL(`/blog${data.cover}`, Astro.site) : null;
   <meta property="og:url" content={canonicalURL} />
   <meta property="og:site_name" content="Wapitee" />
   <meta property="og:locale" content={locales[lang].replace('-', '_')} />
+  <meta property="og:locale:alternate" content={lang === 'zh' ? 'en_US' : 'zh_CN'} />
   {coverURL && <meta property="og:image" content={coverURL} />}
+  <meta property="article:published_time" content={data.created} />
+  <meta property="article:modified_time" content={data.updated || data.created} />
+  {data.tags.map(tag => <meta property="article:tag" content={tag} />)}
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
@@ -79,13 +83,16 @@ const coverURL = data.cover ? new URL(`/blog${data.cover}`, Astro.site) : null;
   <!-- Article Schema -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     "headline": data.title,
     "description": data.summary,
     ...(coverURL ? { "image": coverURL.toString() } : {}),
     "inLanguage": lang,
     "datePublished": data.created,
     "dateModified": data.updated || data.created,
+    "url": canonicalURL.toString(),
+    "wordCount": wordCount,
+    "keywords": data.tags.join(', '),
     "author": {
       "@type": "Organization",
       "name": "Wapitee",
@@ -97,6 +104,26 @@ const coverURL = data.cover ? new URL(`/blog${data.cover}`, Astro.site) : null;
       "url": "https://wapitee.io"
     },
     "mainEntityOfPage": canonicalURL.toString()
+  })} />
+
+  <!-- Breadcrumb Schema -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": lang === 'zh' ? '博客' : 'Blog',
+        "item": new URL(`/blog${prefix}/`, Astro.site).toString()
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": data.title,
+        "item": canonicalURL.toString()
+      }
+    ]
   })} />
 
   <!-- Fonts -->

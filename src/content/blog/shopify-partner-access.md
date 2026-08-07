@@ -1,5 +1,5 @@
 ---
-title: "How to Grant Partner Access to Your Shopify Store (Complete 2026 Guide)"
+title: "Grant Partner Access to Your Shopify Store (2026 Guide)"
 status: "published"
 brand: "wapitee"
 topic: "shopify"
